@@ -26,21 +26,34 @@ cause each input to be printed to stdout.
 ## Structure
 ```
 AVL-BST/
-│-- Makefile
-│-- src/
+│
+├── Makefile
+├── src/
 │   ├── global.c
 │   ├── main.c
 │   ├── ui.c
 │   ├── bt.c
 │   ├── bst.c
-│   └── avl.c
+│   ├── avl.c
+│   └── main_test.c
 │
-│-- header/
+├── header/
 │   ├── global.h
 │   ├── ui.h
 │   ├── bt.h
 │   ├── bst.h
 │   └── avl.h
 │
-│-- data/
+├── build/
+│   ├── global.o
+│   ├── main.o
+│   ├── ui.o
+│   ├── bt.o
+│   ├── bst.o
+│   ├── avl.o
+│   ├── main_test.o
+│   ├── tree        # Main executable
+│   └── test        # Test executable
+└── data/
+
 ```
