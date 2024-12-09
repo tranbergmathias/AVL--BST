@@ -1,4 +1,4 @@
 *.txt
 /a.out
 ./data
-/tree
+./tree
