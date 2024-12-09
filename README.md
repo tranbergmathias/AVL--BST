@@ -22,3 +22,25 @@ cause each input to be printed to stdout.
 - Run with input from file: `./tree -e < data/some_input.txt`
 - Run with input from file and output to another file:
 	`./tree -e < data/some_input.txt > data/output.txt` 
+
+## Structure
+```
+AVL-BST/
+│-- Makefile
+│-- src/
+│   ├── global.c
+│   ├── main.c
+│   ├── ui.c
+│   ├── bt.c
+│   ├── bst.c
+│   └── avl.c
+│
+│-- header/
+│   ├── global.h
+│   ├── ui.h
+│   ├── bt.h
+│   ├── bst.h
+│   └── avl.h
+│
+│-- data/
+```
