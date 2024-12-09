@@ -43,15 +43,15 @@ void print_array(int* a, int size)
 //-----------------------------------------------------------------------------
 void print_2d(int* a, int maxnodes)
 {
-    printf("\nTree 2d\n");
+    printf("\nTree 2D\n");
 
     int max_level = (int)log2(maxnodes); // The maximum depth of the tree based on maxnodes
-    int space_between_nodes = (int)pow(2, max_level);  // The total width of the tree (space between nodes)
+    int space_between_nodes = (int)pow(2, max_level + 1) - 1; // Initial space between nodes
 
     // Loop through each level of the tree
     for (int i = 0; i <= max_level; i++) {
-        // Print leading spaces to center the tree at the current level
-        int leading_spaces = (int)pow(2, max_level - i) - 1;
+        // Print leading spaces to center-align the nodes at the current level
+        int leading_spaces = space_between_nodes / 2;
         for (int j = 0; j < leading_spaces; j++) {
             printf(" ");
         }
@@ -67,20 +67,21 @@ void print_2d(int* a, int maxnodes)
                 printf("*");
             }
 
-            // Print spaces between nodes, making the space smaller as we go down levels
+            // Print spaces between nodes
             if (j < (int)pow(2, i) - 1) {
-                for (int k = 0; k < space_between_nodes - 1; k++) {
-                    printf(" "); // Print space between nodes
+                for (int k = 0; k < space_between_nodes; k++) {
+                    printf(" ");
                 }
             }
         }
 
-        // Decrease the space_between_nodes to get smaller spaces as we go down
+        // Reduce the space between nodes for the next level
         space_between_nodes = space_between_nodes / 2;
 
         printf("\n");
     }
 }
+
 //-----------------------------------------------------------------------------
 // prints the menu
 //-----------------------------------------------------------------------------

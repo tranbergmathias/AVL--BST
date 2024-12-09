@@ -1,28 +1,37 @@
-CFLAGS = -Wall
+CFLAGS = -Wall -Iheader
 # Remove this -lm flag on Mac
 LDLIBS = -lm
 
-tree:		global.o bt.o bst.o avl.o main.o ui.o
-			gcc $(CLFAGS) -o tree bt.o bst.o avl.o ui.o global.o main.o $(LDLIBS)
+SRC = src
+HEADER = header
 
-global.o:	global.h global.c
-			gcc $(CFLAGS) -c global.c
+# Object files
+OBJS = global.o bt.o bst.o avl.o main.o ui.o
 
-main.o:		main.c ui.h global.h
-			gcc $(CFLAGS) -c main.c
+# Target executable
+tree: $(OBJS)
+		gcc $(CFLAGS) -o tree $(addprefix $(SRC)/, $(OBJS)) $(LDLIBS)
 
-ui.o:		ui.c ui.h global.h
-			gcc $(CFLAGS) -c ui.c
+# Object file dependencies
+global.o: $(SRC)/global.c $(HEADER)/global.h
+		gcc $(CFLAGS) -c $(SRC)/global.c -o $(SRC)/global.o
 
-bt.o:		bt.h bt.c
-			gcc $(CFLAGS) -c bt.c
+main.o: $(SRC)/main.c $(HEADER)/ui.h $(HEADER)/global.h
+		gcc $(CFLAGS) -c $(SRC)/main.c -o $(SRC)/main.o
 
-bst.o:		bt.h bst.h global.h bst.c
-			gcc $(CFLAGS) -c bst.c
+ui.o: $(SRC)/ui.c $(HEADER)/ui.h $(HEADER)/global.h
+		gcc $(CFLAGS) -c $(SRC)/ui.c -o $(SRC)/ui.o
 
-avl.o:		bt.h bst.h avl.h global.h avl.c
-			gcc $(CFLAGS) -c avl.c
+bt.o: $(SRC)/bt.c $(HEADER)/bt.h
+		gcc $(CFLAGS) -c $(SRC)/bt.c -o $(SRC)/bt.o
 
+bst.o: $(SRC)/bst.c $(HEADER)/bt.h $(HEADER)/bst.h $(HEADER)/global.h
+		gcc $(CFLAGS) -c $(SRC)/bst.c -o $(SRC)/bst.o
+
+avl.o: $(SRC)/avl.c $(HEADER)/bt.h $(HEADER)/bst.h $(HEADER)/avl.h $(HEADER)/global.h
+		gcc $(CFLAGS) -c $(SRC)/avl.c -o $(SRC)/avl.o
+
+# Clean up
 clean:
-			rm -f *.o
-			rm -f tree
+		rm -f $(SRC)/*.o
+		rm -f tree
