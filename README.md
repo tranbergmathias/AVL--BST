@@ -19,6 +19,6 @@ The default is BST, and you can change it by setting the AVL mode:
 The echo option is useful if you want to redirect input from a file. It will
 cause each input to be printed to stdout.
 - Run normally: `./tree`
-- Run with input from file: `./tree -e < some_input.txt`
+- Run with input from file: `./tree -e < data/some_input.txt`
 - Run with input from file and output to another file:
-	`./tree -e < some_input.txt > output.txt` 
+	`./tree -e < data/some_input.txt > data/output.txt` 
