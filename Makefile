@@ -1,37 +1,53 @@
-CFLAGS = -Wall -Iheader
-# Remove this -lm flag on Mac
-LDLIBS = -lm
+.PHONY: clean tidy all test
 
-SRC = src
-HEADER = header
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -std=gnu99 -Iheader -g
+LFLAGS = -lm
 
-# Object files
-OBJS = global.o bt.o bst.o avl.o main.o ui.o
+# Directories
+BUILD_DIR = ./build/
+SRC_DIR = ./src/
+HEADER_DIR = ./header/
 
-# Target executable
-tree: $(OBJS)
-		gcc $(CFLAGS) -o tree $(addprefix $(SRC)/, $(OBJS)) $(LDLIBS)
+# Source and header files
+HDR = $(wildcard $(HEADER_DIR)*.h)
+SRC = $(filter-out $(SRC_DIR)*_test.c, $(wildcard $(SRC_DIR)*.c))
+OBJ = $(patsubst $(SRC_DIR)%.c, $(BUILD_DIR)%.o, $(SRC))
 
-# Object file dependencies
-global.o: $(SRC)/global.c $(HEADER)/global.h
-		gcc $(CFLAGS) -c $(SRC)/global.c -o $(SRC)/global.o
+# Test flags and files
+CFLAGS_TEST = $(CFLAGS)
+LFLAGS_TEST = $(LFLAGS) -lcheck -lm -lpthread -lrt -lsubunit
+SRC_TEST = $(wildcard $(SRC_DIR)*_test.c)
+OBJ_TEST = $(patsubst $(SRC_DIR)%.c, $(BUILD_DIR)%.o, $(SRC_TEST))
 
-main.o: $(SRC)/main.c $(HEADER)/ui.h $(HEADER)/global.h
-		gcc $(CFLAGS) -c $(SRC)/main.c -o $(SRC)/main.o
+# Default target
+all: main
 
-ui.o: $(SRC)/ui.c $(HEADER)/ui.h $(HEADER)/global.h
-		gcc $(CFLAGS) -c $(SRC)/ui.c -o $(SRC)/ui.o
+# Main executable
+main: $(OBJ)
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)tree $(OBJ) $(LFLAGS)
+	@echo "Build complete. Executable is at $(BUILD_DIR)tree"
 
-bt.o: $(SRC)/bt.c $(HEADER)/bt.h
-		gcc $(CFLAGS) -c $(SRC)/bt.c -o $(SRC)/bt.o
+# Test executable
+test: $(OBJ_TEST)
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS_TEST) -o $(BUILD_DIR)test $(OBJ_TEST) $(LFLAGS_TEST)
+	@echo "Test build complete. Executable is at $(BUILD_DIR)test"
 
-bst.o: $(SRC)/bst.c $(HEADER)/bt.h $(HEADER)/bst.h $(HEADER)/global.h
-		gcc $(CFLAGS) -c $(SRC)/bst.c -o $(SRC)/bst.o
+# Rule for building object files
+$(BUILD_DIR)%.o: $(SRC_DIR)%.c $(HDR)
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c $(CFLAGS) -o $@ $<
+	@echo "Compiled $< -> $@"
 
-avl.o: $(SRC)/avl.c $(HEADER)/bt.h $(HEADER)/bst.h $(HEADER)/avl.h $(HEADER)/global.h
-		gcc $(CFLAGS) -c $(SRC)/avl.c -o $(SRC)/avl.o
-
-# Clean up
+# Clean up all generated files
 clean:
-		rm -f $(SRC)/*.o
-		rm -f tree
+	rm -rf $(BUILD_DIR)
+	@echo "Cleaned up build directory."
+
+# Tidy intermediate object files
+tidy:
+	rm -rf $(BUILD_DIR)*.o
+	@echo "Removed intermediate object files."

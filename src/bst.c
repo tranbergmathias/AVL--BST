@@ -21,8 +21,7 @@ static void _bfs(BST T, int* a, int pos, int max);
  * @brief Creates a new BST with a value.
  * 
  * Initializes a new binary search tree with a single node containing
- * the specified value. This is the base case for creating a new tree or 
- * adding the first node.
+ * the specified value. 
  * 
  * @param val The value to store in the new tree.
  * @return New BST.
@@ -116,8 +115,7 @@ void preorder(BST T, int* a)
  * @brief Inorder traversal, stores values in array.
  * 
  * Inorder traversal visits the left subtree, then the root, then
- * the right subtree. This order results in nodes being visited in
- * ascending order, which is useful for printing the tree's values in order.
+ * the right subtree. 
  * 
  * @param T Pointer to the root.
  * @param a Array to store results.
