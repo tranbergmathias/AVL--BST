@@ -30,7 +30,7 @@ static AVL dlr(AVL T);  // Double left rotation (LR imbalance)
 AVL avl_add(AVL T, int val)
 {
     if(DEBUG) printf("avl_add (%d)\n", val);
-    T = bst_add(T, val);  
+    T = bst_add(T, val); 
     return balance(T);     
 }
 
@@ -46,10 +46,9 @@ AVL avl_add(AVL T, int val)
 AVL avl_rem(AVL T, int val)
 {
     if(DEBUG) printf("avl_rem (%d)\n", val);
-    T = bst_rem(T, val);  
+    T = bst_rem(T, val);   
     return balance(T);     
 }
-
 /**
  * @brief Balances the AVL tree if needed.
  *
@@ -60,27 +59,26 @@ AVL avl_rem(AVL T, int val)
  */
 AVL balance(AVL T)
 {
-	if (T == NULL) return T;
-    int balanceFactor = height(get_LC(T)) - height(get_RC(T));  
+    if (T == NULL) return T;
 
-    // Left-Left Case 
-    if (balanceFactor > 1) {
-        if (height(get_LC(get_LC(T))) >= height(get_LC(get_RC(T)))) {
-            return srr(T);  
+    int balanceFactor = height(get_LC(T)) - height(get_RC(T));
+
+    if (balanceFactor > 1) {  // Left heavy
+        if (height(get_LC(get_LC(T))) >= height(get_RC(get_LC(T)))) {
+            return srr(T);  // Left-Left Case
         } else {
-            return dlr(T); 
+            return drr(T);  // Left-Right Case
+        }
+    }
+    if (balanceFactor < -1) {  // Right heavy
+        if (height(get_RC(get_RC(T))) >= height(get_LC(get_RC(T)))) {
+            return slr(T);  // Right-Right Case
+        } else {
+            return dlr(T);  // Right-Left Case
         }
     }
 
-    // Right-Right Case 
-    if (balanceFactor < -1) {
-        if (height(get_RC(get_RC(T))) >= height(get_RC(get_LC(T)))) {
-            return slr(T); 
-        } else {
-            return drr(T);  
-        }
-    } 
-    return T;  
+    return T;  // Already balanced
 }
 
 //
@@ -128,7 +126,7 @@ static AVL slr(AVL T)
 static AVL drr(AVL T)
 {
     if(DEBUG) printf("drr\n");
-    T = slr(get_RC(T));  
+    set_LC(T, slr(get_LC(T)));  
 	return srr(T);  
 }
 
@@ -141,6 +139,7 @@ static AVL drr(AVL T)
 static AVL dlr(AVL T)
 {
     if(DEBUG) printf("dlr\n");
-    T = srr(get_LC(T));  
+    set_RC(T, srr(get_RC(T)));  
 	return slr(T);  
 }
+

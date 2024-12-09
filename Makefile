@@ -1,53 +1,28 @@
-.PHONY: clean tidy all test
+CFLAGS = -Wall
+# Remove this -lm flag on Mac
+LDLIBS = -lm
 
-# Compiler and flags
-CC = gcc
-CFLAGS = -Wall -std=gnu99 -Iheader -g
-LFLAGS = -lm
+tree:		global.o bt.o bst.o avl.o main.o ui.o
+			gcc $(CLFAGS) -o tree bt.o bst.o avl.o ui.o global.o main.o $(LDLIBS)
 
-# Directories
-BUILD_DIR = ./build/
-SRC_DIR = ./src/
-HEADER_DIR = ./header/
+global.o:	global.h global.c
+			gcc $(CFLAGS) -c global.c
 
-# Source and header files
-HDR = $(wildcard $(HEADER_DIR)*.h)
-SRC = $(filter-out $(SRC_DIR)*_test.c, $(wildcard $(SRC_DIR)*.c))
-OBJ = $(patsubst $(SRC_DIR)%.c, $(BUILD_DIR)%.o, $(SRC))
+main.o:		main.c ui.h global.h
+			gcc $(CFLAGS) -c main.c
 
-# Test flags and files
-CFLAGS_TEST = $(CFLAGS)
-LFLAGS_TEST = $(LFLAGS) -lcheck -lm -lpthread -lrt -lsubunit
-SRC_TEST = $(wildcard $(SRC_DIR)*_test.c)
-OBJ_TEST = $(patsubst $(SRC_DIR)%.c, $(BUILD_DIR)%.o, $(SRC_TEST))
+ui.o:		ui.c ui.h global.h
+			gcc $(CFLAGS) -c ui.c
 
-# Default target
-all: main
+bt.o:		bt.h bt.c
+			gcc $(CFLAGS) -c bt.c
 
-# Main executable
-main: $(OBJ)
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)tree $(OBJ) $(LFLAGS)
-	@echo "Build complete. Executable is at $(BUILD_DIR)tree"
+bst.o:		bt.h bst.h global.h bst.c
+			gcc $(CFLAGS) -c bst.c
 
-# Test executable
-test: $(OBJ_TEST)
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS_TEST) -o $(BUILD_DIR)test $(OBJ_TEST) $(LFLAGS_TEST)
-	@echo "Test build complete. Executable is at $(BUILD_DIR)test"
+avl.o:		bt.h bst.h avl.h global.h avl.c
+			gcc $(CFLAGS) -c avl.c
 
-# Rule for building object files
-$(BUILD_DIR)%.o: $(SRC_DIR)%.c $(HDR)
-	@mkdir -p $(BUILD_DIR)
-	$(CC) -c $(CFLAGS) -o $@ $<
-	@echo "Compiled $< -> $@"
-
-# Clean up all generated files
 clean:
-	rm -rf $(BUILD_DIR)
-	@echo "Cleaned up build directory."
-
-# Tidy intermediate object files
-tidy:
-	rm -rf $(BUILD_DIR)*.o
-	@echo "Removed intermediate object files."
+			rm -f *.o
+			rm -f tree

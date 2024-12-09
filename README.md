@@ -4,7 +4,7 @@ start-code.
 
 ## Use available options
 ```
-$ ./tree -h
+$ ./build/tree -h
 USAGE: tree [flags]
 	-h	-- help
 	-m avl	-- AVL mode
@@ -55,5 +55,4 @@ AVL-BST/
 │   ├── tree        # Main executable
 │   └── test        # Test executable
 └── data/
-
 ```
