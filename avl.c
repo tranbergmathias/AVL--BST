@@ -3,6 +3,7 @@
 //=============================================================================
 #include "avl.h"
 #include "bst.h"
+#include "global.h"
 #define DEBUG 0
 
 //
@@ -30,7 +31,7 @@ static AVL dlr(AVL T);  // Double left rotation (LR imbalance)
 AVL avl_add(AVL T, int val)
 {
     if(DEBUG) printf("avl_add (%d)\n", val);
-    T = bst_add(T, val); 
+    T = add(T, val); 
     return balance(T);     
 }
 
@@ -46,7 +47,7 @@ AVL avl_add(AVL T, int val)
 AVL avl_rem(AVL T, int val)
 {
     if(DEBUG) printf("avl_rem (%d)\n", val);
-    T = bst_rem(T, val);   
+    T = rem(T, val);   
     return balance(T);     
 }
 /**
